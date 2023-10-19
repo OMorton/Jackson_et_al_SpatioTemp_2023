@@ -76,7 +76,7 @@ CITES_TRUE$WildSource <- if_else(CITES_TRUE$Source %in% c("W", "X", "R"), "Yes",
 
 ## Commercial purpose as defined by ourselves. We justify the inclusion of personal under commercial to capture aspects of the pet trade,
 ## as done in previous studies see Bush et al.
-CITES_TRUE$PurposeC <- if_else(CITES_TRUE$Purpose %in% c("P", "T"), "Commercial", "Not Commercial")
+CITES_TRUE$PurposeC <- if_else(CITES_TRUE$Purpose %in% c("P", "T", "H"), "Commercial", "Not Commercial")
 
 CITES_Vert <- CITES_TRUE
 
@@ -112,6 +112,7 @@ CITES_Vert <- CITES_Vert %>% filter(is.na(Unit)|Unit == "Number of specimens", !
 
 ## In total 434,296,150 vert WOEs moved since the stard of CITES (all sources codes and purposes)
 sum(na.omit(CITES_Vert$WOE))
+sum(na.omit(filter(CITES_Vert, PurposeC == "Commercial" & WildSource == "Yes")$WOE)) ## 175,755,242 vs 176,269,085
 
 ## Figure shows the values for 2021 and 2022 are clearly incomplete.
 ## it is uncertain how many reports are still pending for 2018 or earlier.
@@ -139,7 +140,7 @@ CITES_Vert %>% group_by(Reporter.type) %>% tally()
 #### Original listing ####
 
 ## extract species in trade taxonomic information
-## 1227 species in both Imp and Exp reported data sets
+## 1240 species in both Imp and Exp reported data sets
 (CITES_Species <- CITES_Vert %>% filter(Year %in% c(2000:2020), !grepl("spp", Taxon), !grepl("hybrid", Taxon),
                                         !Appendix == "N",
                                       WildSource == "Yes", PurposeC == "Commercial", WOE >0) %>%
@@ -174,14 +175,14 @@ FL_SP <- First_listing %>% filter(!is.na(Taxon)) %>% select(Taxon, Year)
 
 Sp_join <- left_join(CITES_Species, FL_SP, by = "Taxon")
 
-sp_done <- Sp_join %>% filter(!is.na(Year)) ## 526 perfect matches
+sp_done <- Sp_join %>% filter(!is.na(Year)) ## 534 perfect matches
 
 ## Second match at genus level
 genus_to_match <- Sp_join %>% filter(is.na(Year)) %>% select(-Year)
 ## get all the genus level appendix listings
 FL_Genus <- First_listing %>% filter(is.na(Taxon), !is.na(Genus)) %>% select(Genus, Year) ## 217 listings
 Genus_join <- left_join(genus_to_match, FL_Genus, by = "Genus")
-Genus_done <- Genus_join %>% filter(!is.na(Year)) ## 308 perfect matches
+Genus_done <- Genus_join %>% filter(!is.na(Year)) ## 309 perfect matches
 
 
 ## third match at family level
@@ -189,20 +190,20 @@ Genus_done <- Genus_join %>% filter(!is.na(Year)) ## 308 perfect matches
 FL_Family <- First_listing %>% filter(is.na(Taxon), is.na(Genus), !is.na(Family)) %>% select(Family, Year)
 Fam_to_match <- Genus_join %>% filter(is.na(Year)) %>% select(-Year)
 Fam_join <- left_join(Fam_to_match, FL_Family, by = "Family")
-Fam_done <- Fam_join %>% filter(!is.na(Year)) ## 302 perfect matches
+Fam_done <- Fam_join %>% filter(!is.na(Year)) ## 303 perfect matches
 
 ## Fourth match at order level
 FL_Order <- First_listing %>% filter(is.na(Taxon), is.na(Genus), is.na(Family), !is.na(Order)) %>% select(Order, Year)
 Order_to_match <- Fam_join %>% filter(is.na(Year)) %>% select(-Year) ## 56 to still match
 Order_join <- left_join(Order_to_match, FL_Order, by = "Order")
-Order_done <- Order_join %>% filter(!is.na(Year)) ## 81 perfect matches
+Order_done <- Order_join %>% filter(!is.na(Year)) ## 82 perfect matches
 
 All_sp_fl <- rbind(sp_done,Genus_done,Fam_done, Order_done)
 
 All_sp_fl %>% filter(Year >1999)
 
 #### Attach species FL to CITES db ####
-FL_CITES_Species <- All_sp_fl %>% rename(FL_year = Year) %>% select(Taxon, FL_year) ## 1217 sp
+FL_CITES_Species <- All_sp_fl %>% rename(FL_year = Year) %>% select(Taxon, FL_year) ## 1228 sp
 
 CITES_Vert <- left_join(CITES_Vert, FL_CITES_Species, by = "Taxon")
 check <- CITES_Vert %>% filter(is.na(FL_year))
@@ -212,10 +213,12 @@ CITES_Vert <- CITES_Vert %>% mutate(FL_year = case_when(Taxon == "Lontra canaden
                                           Taxon == "Nasua nasua" ~ 1977,
                                           Taxon == "Vulpes vulpes" ~ 1989,
                                           Taxon == "Damaliscus pygargus" ~ 1975,
-                                          Taxon == "Hydrictis maculicollis" ~ 1977,
                                           Taxon == "Equus zebra" ~ 1975,
+                                          Taxon == "Hydrictis maculicollis" ~ 1977,
                                           Taxon == "Ovis cycloceros arkal" ~ 2000,
+                                          Taxon == "Cervus elaphus" ~ 1975, ## ssp listed
                                           Taxon == "Mustela erminea" ~ 1989,
+                                          Taxon == "Bison bison" ~ 1975, ## ssp listed
                                           Taxon == "Hippotragus niger" ~ 1975,
                                           Taxon == "Enhydra lutris" ~ 1975,
                                           TRUE ~ as.numeric(FL_year)))
@@ -232,12 +235,12 @@ CITES_Deletions <- Historic_CITES %>% filter(ChangeType == "DELETION" & IsCurren
   group_by(Taxon) %>% arrange(Taxon, Year_DEL) %>% slice_max(Year_DEL)
 
 Del_sp <- CITES_Deletions$Taxon
-CITES_Vert %>% filter(Taxon %in% Del_sp) %>% summarise(n = (unique(Taxon))) ## 118 speices
+CITES_Vert %>% filter(Taxon %in% Del_sp) %>% summarise(n = (unique(Taxon))) ## 120 speices
 
 ## Add the deletions to the trade database as a separate year of deletion collumn.
 ## Later we will use this as an end point for all these series.
 ## All other species that had not been deleted will have full time series to 2018, therefore we can add the
-## final year (2018) to the species without a deletion year.
+## final year (2020) to the species without a deletion year.
 CITES_Vert <- left_join(CITES_Vert, CITES_Deletions, by = "Taxon") %>%
   mutate(Year_DEL = ifelse(is.na(Year_DEL), 2020, Year_DEL))
 
@@ -248,7 +251,7 @@ CITES_Vert <- left_join(CITES_Vert, CITES_Deletions, by = "Taxon") %>%
                       WildSource == "Yes", PurposeC == "Commercial", WOE >0) %>%
   group_by(Class) %>% tally(WOE))
 
-write.csv(CITES_Vert, "Data/All_Vertebrates/CITES_Vert_Raw.csv", na = "")
+write.csv(CITES_Vert, "Data/All_Vertebrates/CITES_Vert_RawH.csv", na = "")
 
 
 
