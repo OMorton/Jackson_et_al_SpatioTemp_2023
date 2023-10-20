@@ -1,21 +1,25 @@
 
 library(rredlist)
 
-CITES_Vert <- data.table::fread("Data/All_Vertebrates/CITES_Vert_Raw.csv", na.strings = "")
+CITES_Vert <- data.table::fread("Data/All_Vertebrates/CITES_Vert_RawH.csv", na.strings = "")
 
-## 1227 species in both Importer and Exported Data
+## 1240 species in both Importer and Exported Data
 Sp_List <- CITES_Vert %>% group_by(Taxon) %>% tally() %>% select(Taxon) %>% as.data.frame()
 CITES_Vert %>% filter(Year > 1999) %>% group_by(WildSource) %>% summarise(n_distinct(Taxon))
 
 
 ##  1 domestic species.
-## 5 sub species specific statuses to manually add.
+## 6 sub species specific statuses to manually add.
 ## 9 never evaluated species.
 NA_update <- Sp_List %>% mutate(IUCNName = case_when(Taxon == "Aceros cassidix" ~ "Rhyticeros cassidix",
                                                    Taxon == "Aceros corrugatus" ~"Rhabdotorrhinus corrugatus",
                                                    Taxon == "Aceros leucocephalus" ~ "Rhabdotorrhinus leucocephalus",
                                                    Taxon == "Aglaiocercus kingi" ~ "Aglaiocercus kingii",
                                                    Taxon == "Alisterus chloropterus mozskowskii" ~ "Alisterus chloropterus",
+                                                   Taxon == "Amazilia amazilia" ~ "Amazilis amazilia",
+                                                   Taxon == "Amazilia cyanocephala" ~ "Saucerottia cyanocephala",
+                                                   Taxon == "Amazilia julie" ~ "Chlorestes julie",
+                                                   Taxon == "Lonchura oryzivora" ~ "Padda oryzivora",
                                                    Taxon == "Amazona festiva festiva" ~ "Amazona festiva",
                                                    Taxon == "Amazona mercenaria" ~ "Amazona mercenarius",
                                                    Taxon == "Amazona xanthops" ~ "Alipiopsitta xanthops",
@@ -200,6 +204,10 @@ NA_update <- Sp_List %>% mutate(IUCNName = case_when(Taxon == "Aceros cassidix" 
                                                    Taxon == "Vulpes vulpes montana" ~ "Vulpes vulpes",
                                                    Taxon == "Xenochrophis piscator" ~ "Fowlea piscator",
                                                    Taxon == "Zaglossus bruijni" ~ "Zaglossus bruijnii",
+                                                   Taxon == "Cervus elaphus bactrianus" ~ "Cervus elaphus",
+                                                   Taxon == "Hippotragus niger variani" ~ "Hippotragus niger ssp. variani", ## ssp added manually
+                                                   Taxon == "Hyaena brunnea" ~ "Parahyaena brunnea",
+                                                   Taxon == "Ovis nigrimontana" ~ "Ovis ammon",
                                                    TRUE ~ Taxon))
 
 
@@ -249,15 +257,19 @@ for(i in 1:nrow(NA_update)){ # would have used for(sp in speciesList) but need i
   }
 }
 
+rl_history(name="Trachypithecus cristatus", key = apikey)
+
 ## write out the the data for speed.
 #write.csv(df, "Data/All_Vertebrates/IUCN_API/IUCN_API_NA_ASSESSMENTS.csv")  
 df <- read.csv("Data/All_Vertebrates/IUCN_API/IUCN_API_NA_ASSESSMENTS.csv") %>% select(-X)
 
-## 15 NA species (this is as expected as per the totals above)
+## 16 NA species (this is as expected as per the totals above)
 df %>% filter(is.na(Year))
 
 Ssp_code <- rbind(data.frame(Taxon = "Equus zebra zebra", IUCNName = "Equus zebra ssp. zebra", Year = c(1996, 2008, 2019), 
                              IUCN_code = c("EN", "VU", "LC")),
+                  data.frame(Taxon = "Hippotragus niger variani", IUCNName = "Hippotragus niger ssp. variani", Year = c(1996, 2008, 2016), 
+                             IUCN_code = c("CR", "CR", "CR")),
                   data.frame(Taxon = "Equus zebra hartmannae", IUCNName = "Equus zebra ssp. hartmannae", Year = c(1996, 2008, 2019), 
                              IUCN_code = c("EN", "VU", "VU")),
                   data.frame(Taxon = "Damaliscus pygargus pygargus", IUCNName = "Damaliscus pygargus ssp. pygargus", Year = c(1996, 2003, 2008, 2017), 
@@ -267,21 +279,22 @@ Ssp_code <- rbind(data.frame(Taxon = "Equus zebra zebra", IUCNName = "Equus zebr
                   data.frame(Taxon = "Ceratotherium simum simum", IUCNName = "Ceratotherium simum ssp. simum", Year = c(2000, 2020), 
                              IUCN_code = c("NT", "NT"))) %>% mutate(IUCN_cat = NA) %>% select(- Taxon)
 
-df <- rbind(filter(df, !IUCNName %in% c("Equus zebra ssp. zebra", "Equus zebra ssp. hartmannae", "Damaliscus pygargus ssp. pygargus", 
+df <- rbind(filter(df, !IUCNName %in% c("Equus zebra ssp. zebra", "Hippotragus niger ssp. variani",
+                                        "Equus zebra ssp. hartmannae", "Damaliscus pygargus ssp. pygargus", 
                                      "Cercopithecus mitis ssp. kandti", "Ceratotherium simum ssp. simum")),
             Ssp_code)
 
 ## IUCN names will always be less than Taxon as some CITES sp/ssp resolve only to a single IUCN recognized taxon. 
-length(unique(df$IUCNName)) ## 1206
-df_all <- left_join(NA_update, df)
-length(unique(df_all$Taxon)) ## 1227
+length(unique(df$IUCNName)) ## 1216
+df_all <- left_join(NA_update, df, by = "IUCNName")
+length(unique(df_all$Taxon)) ## 1224
 
 
 #### Cleaning pre 2000 IUCN codes ####
 ## Check the early version of the IUCN are updated prior to 2000
 ## all instance where the following codes are given species are updated again before 2000
 check <- df_all %>% group_by(Taxon) %>% filter(any(IUCN_code %in% c("CT", "NR", "K", "R", "T", "V", "E", "I", "nt", NA)))
-length(unique(df_all$Taxon)) ## 1227
+length(unique(df_all$Taxon)) ## 1224
 
 
 ## Therefore remove these
@@ -290,7 +303,7 @@ Historic_IUCN <- df_all %>%
   mutate(Year = if_else(is.na(Year), 2000, as.numeric(Year))) %>%
   filter(!IUCN_code %in% c("CT", "NR", "K", "R", "T", "V", "E", "I", "nt"))
 
-length(unique(Historic_IUCN$Taxon)) ## 1227
+length(unique(Historic_IUCN$Taxon)) ## 1240
 
 ## Only EX and EW species are a single Chelonoidis niger (in 2000) and 2 Oryx from wild sources in 2017 and 19.
 ## Remove these further on.
@@ -304,7 +317,7 @@ Historic_IUCN_up <- Historic_IUCN %>%
 
 ## Check removal and conversion left only the post 2001 framework
 unique(Historic_IUCN_up$IUCN_code)
-unique(Historic_IUCN_up$Taxon) ## 1227
+unique(Historic_IUCN_up$Taxon) ## 1240
 
 ## Backbone of values 2000 - 2020
 backbone <- expand.grid(Year = as.integer(1975:2020), Taxon = unique(Historic_IUCN_up$Taxon))
@@ -331,7 +344,7 @@ df_new <- left_join(backbone, Historic_IUCN_up) %>%
 length(unique(df_new$Taxon)) ## 1227 species
 ## Tidy up and remove the 2 ex and ew sp, the hybrid and the domestic sheep.
 df_new <- df_new %>% filter(!Taxon %in% c("Chelonoidis niger", "Oryx dammah", "Ovis aries"))
-length(unique(df_new$Taxon)) ## 1224 species
+length(unique(df_new$Taxon)) ## 1237 species
 
 ## Check no species were assessed twice in one year (2 records for 1 year interfere with the joins)
 df_new %>% group_by(Year, Taxon) %>% tally() %>% filter(n != 1)
@@ -341,7 +354,7 @@ df_new <- df_new %>% mutate(filt = paste(Taxon, Year, IUCN_code)) %>% filter(fil
 
 ## Tidy up and remove the 2 ex and ew sp, the hybrid and the domestic sheep.
 CITES_Vert_Clean <- CITES_Vert %>% filter(!Taxon %in% c("Chelonoidis niger", "Oryx dammah", "Ovis aries"))
-length(unique(CITES_Vert_Clean$Taxon)) ## 1224 species
+length(unique(CITES_Vert_Clean$Taxon)) ## 1237 species
 
 
 #### Exporter Series ####
@@ -362,7 +375,7 @@ CITES_Vert_pro <- CITES_Vert %>% filter(Reporter.type == "E") %>%
 Species_timeframe <- CITES_Vert_pro %>% group_by(Taxon, Class, Exporter, Importer) %>% 
   summarise(Year = seq(from = min(FL_year), to = max(Year_DEL), length.out = max(Year_DEL) - min(FL_year) + 1))
 
-## 1006
+## 1018
 length(unique(Species_timeframe$Taxon))
 
 ## We automate the process but at this point we checked all species that our code produced as being listed then
@@ -396,16 +409,16 @@ Complex_fix <- full_join(Complex_Species_timeframe, CXSP)
 Species_timeframe_full <- rbind(filter(Species_timeframe, !Taxon %in% c("Batagur borneoensis", "Dendrocygna autumnalis", "Dendrocygna bicolor",
                                               "Mellivora capensis", "Trionyx triunguis")),Complex_fix) %>% filter(Year > 1999)
 
-## 1005 sp
+## 1017 sp
 length(unique(Species_timeframe_full$Taxon))
-## 1006 lose one species Hippotragus equinus as it was traded when it wasnt listed.
+## 1017 lose one species Hippotragus equinus as it was traded when it wasnt listed.
 length(unique(CITES_Vert_pro$Taxon))
 
 
 ## Expand the data set to fill missing years between 2000 - 2018
 CITES_Wild_Com_Exp <- left_join(Species_timeframe_full, CITES_Vert_pro, by = c("Taxon", "Exporter", "Importer", "Year", "Class"))
 
-## 1005
+## 1017
 length(unique(CITES_Wild_Com_Exp$Taxon))
 
 ## For 2000 - 2018 when the species are listed and present in the appendices, by our species specific time series,
@@ -421,9 +434,9 @@ CITES_Vert_Series <- left_join(CITES_Com, df_new, by = c("Year", "Taxon")) %>%
   mutate(Name_for_CITESdb = Taxon,
          Name_for_rl_history = if_else(is.na(IUCNName), Taxon, IUCNName))
 
-length(unique(CITES_Vert_Series$Name_for_CITESdb)) ## now 1005
-length(unique(CITES_Vert_Series$Name_for_rl_history)) ## now 995
-length(unique(CITES_Vert_Series$Taxon)) ## now 1005
+length(unique(CITES_Vert_Series$Name_for_CITESdb)) ## now 1017
+length(unique(CITES_Vert_Series$Name_for_rl_history)) ## now 1006
+length(unique(CITES_Vert_Series$Taxon)) ## now 1017
 
 
 ## This code prepares the two versions of IUCN assessments.
@@ -445,8 +458,8 @@ CITES_IUCN_data <- CITES_Vert_Series %>%
 CITES_IUCN_data %>% group_by(IUCN_code) %>% tally()
 CITES_IUCN_data %>% group_by(Threat_code) %>% tally()
 
-length(unique(CITES_IUCN_data$Name_for_rl_history)) ## 995
-length(unique(CITES_IUCN_data$Name_for_CITESdb)) ## 1005
+length(unique(CITES_IUCN_data$Name_for_rl_history)) ## 1006
+length(unique(CITES_IUCN_data$Name_for_CITESdb)) ## 1017
 
 ## Write this data into a csv to be read into subsequent analysis to save time.
 write.csv(CITES_IUCN_data, "Data/All_Vertebrates/CITES_Vert_Exp_Reported.csv", na = "")
@@ -470,7 +483,7 @@ CITES_Vert_pro_I <- CITES_Vert %>% filter(Reporter.type == "I") %>%
 Species_timeframe_I <- CITES_Vert_pro_I %>% group_by(Taxon, Class, Exporter, Importer) %>% 
   summarise(Year = seq(from = min(FL_year), to = max(Year_DEL), length.out = max(Year_DEL) - min(FL_year) + 1))
 
-## 1071
+## 1085
 length(unique(Species_timeframe_I$Taxon))
 
 ## We automate the process but at this point we checked all species that our code produced as being listed then
@@ -505,16 +518,16 @@ Species_timeframe_full_I <- rbind(filter(Species_timeframe_I, !Taxon %in% c("Bat
                                                                         "Mellivora capensis", "Trionyx triunguis")),
                                 Complex_fix_I) %>% filter(Year > 1999)
 
-## 1071 sp
+## 1085 sp
 length(unique(Species_timeframe_full_I$Taxon))
-## 1071 lose one species Hippotragus equinus as it was traded when it wasnt listed.
+## 1085
 length(unique(CITES_Vert_pro_I$Taxon))
 
 
 ## Expand the data set to fill missing years between 2000 - 2018
 CITES_Wild_Com_Imp <- left_join(Species_timeframe_full_I, CITES_Vert_pro_I, by = c("Taxon", "Exporter", "Importer", "Year", "Class"))
 
-## 1071
+## 1085
 length(unique(CITES_Wild_Com_Imp$Taxon))
 
 ## For 2000 - 2018 when the species are listed and present in the appendices, by our species specific time series,
@@ -530,9 +543,9 @@ CITES_Vert_Series_I <- left_join(CITES_Com_I, df_new, by = c("Year", "Taxon")) %
   mutate(Name_for_CITESdb = Taxon,
          Name_for_rl_history = if_else(is.na(IUCNName), Taxon, IUCNName))
 
-length(unique(CITES_Vert_Series_I$Name_for_CITESdb)) ## now 1071
-length(unique(CITES_Vert_Series_I$Name_for_rl_history)) ## now 1055
-length(unique(CITES_Vert_Series_I$Taxon)) ## now 1071
+length(unique(CITES_Vert_Series_I$Name_for_CITESdb)) ## now 1085
+length(unique(CITES_Vert_Series_I$Name_for_rl_history)) ## now 1068
+length(unique(CITES_Vert_Series_I$Taxon)) ## now 1085
 
 
 ## This code prepares the two versions of IUCN assessments.
@@ -554,8 +567,8 @@ CITES_IUCN_data_I <- CITES_Vert_Series_I %>%
 CITES_IUCN_data_I %>% group_by(IUCN_code) %>% tally()
 CITES_IUCN_data_I %>% group_by(Threat_code) %>% tally()
 
-length(unique(CITES_IUCN_data_I$Name_for_rl_history)) ## 1055
-length(unique(CITES_IUCN_data_I$Name_for_CITESdb)) ## 1071
+length(unique(CITES_IUCN_data_I$Name_for_rl_history)) ## 1068
+length(unique(CITES_IUCN_data_I$Name_for_CITESdb)) ## 1085
 
 ## Write this data into a csv to be read into subsequent analysis to save time.
 write.csv(CITES_IUCN_data_I, "Data/All_Vertebrates/CITES_Vert_Imp_Reported.csv", na = "")
