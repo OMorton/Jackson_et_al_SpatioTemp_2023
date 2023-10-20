@@ -94,7 +94,7 @@
 "93","Anguilla","AI",NA,2017,"1","SC69 Doc. 27 (link in doc)",NA,NA,"GB"
 "94","Anguilla","AI",NA,2018,"1","SC70 Inf. 12",NA,NA,"GB"
 "95","Anguilla","AI",NA,2019,"1","CoP18 Doc.26",NA,NA,"GB"
-"96","Anguilla","AI",NA,2020,"1",NA,NA,NA,"GB"
+"96","Anguilla","AI",NA,2020,"1","SC2020 Inf.1",NA,NA,"GB"
 "97","Antigua and Barbuda","AG","Central and South America and the Caribbean",2000,"3","CoP11 Doc. 11.21.1",NA,NA,NA
 "98","Antigua and Barbuda","AG","Central and South America and the Caribbean",2001,"3","SC45 Doc11.1",NA,NA,NA
 "99","Antigua and Barbuda","AG","Central and South America and the Caribbean",2002,"3","CoP12 Doc. 28",NA,NA,NA
@@ -3659,7 +3659,7 @@
 "3658","Sint Maarten","SX",NA,2017,"P","Submission unclear, clarified in 2021 that Netherlands had submitted docs. So outside of study.",NA,"1","NL"
 "3659","Sint Maarten","SX",NA,2018,"P","Submission unclear, clarified in 2021 that Netherlands had submitted docs. So outside of study.",NA,"1","NL"
 "3660","Sint Maarten","SX",NA,2019,"P","Submission unclear, clarified in 2021 that Netherlands had submitted docs. So outside of study.",NA,"1","NL"
-"3661","Sint Maarten","SX",NA,2020,"2","Submission unclear, clarified in 2021 that Netherlands had submitted docs. So outside of study.",NA,"1","NL"
+"3661","Sint Maarten","SX",NA,2020,"2","SC2020 Inf.1",NA,"1","NL"
 "3662","Slovakia","SK","Europe",2000,"1","CoP11 Doc. 11.21.1",NA,NA,NA
 "3663","Slovakia","SK","Europe",2001,"1","SC45 Doc11.1",NA,NA,NA
 "3664","Slovakia","SK","Europe",2002,"1","CoP12 Doc. 28",NA,NA,NA
@@ -3862,7 +3862,7 @@
 "3861","Svalbard and Jan Mayen","SJ",NA,2017,"P","Still NA to date, but a Dependent of FR",NA,"1","NO"
 "3862","Svalbard and Jan Mayen","SJ",NA,2018,"P","Still NA to date, but a Dependent of FR",NA,"1","NO"
 "3863","Svalbard and Jan Mayen","SJ",NA,2019,"P","Still NA to date, but a Dependent of FR",NA,"1","NO"
-"3864","Svalbard and Jan Mayen","SJ",NA,2020,"P","Still NA to date, but a Dependent of FR",NA,"1","NO"
+"3864","Svalbard and Jan Mayen","SJ",NA,2020,"P","Still NA to date, but a Dependent of NO",NA,"1","NO"
 "3865","Sweden","SE","Europe",2000,"1","CoP11 Doc. 11.21.1",NA,NA,NA
 "3866","Sweden","SE","Europe",2001,"1","SC45 Doc11.1",NA,NA,NA
 "3867","Sweden","SE","Europe",2002,"1","CoP12 Doc. 28",NA,NA,NA
