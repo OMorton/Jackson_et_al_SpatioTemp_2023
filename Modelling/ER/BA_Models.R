@@ -117,7 +117,7 @@ Rept_BA <- Country_dat_full_vol_rept %>% group_by(Country) %>%
   ungroup()
 
 ## Tally the number of countries.
-length(unique(Aves_BA$Country)) ## 16
+length(unique(Aves_BA$Country)) ## 18
 length(unique(Amph_BA$Country)) ## 2
 length(unique(Mam_BA$Country)) ## 13
 length(unique(Rept_BA$Country)) ## 16
@@ -139,7 +139,7 @@ Aves_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1 + (1 + Time*Category1|Country) + 
                  prior(normal(0,2), "sd")),
                data = Aves_BA,
                control = list(adapt_delta = .97),
-               file = "BA_Models/Exports_ER/Aves_Exp_BA.rds",
+               file = "BA_Models/Exports_ER/Aves_Exp_BA_vH.rds",
                chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 Mam_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1 + (1 + Time*Category1|Country) + (1|Year)), 
@@ -151,7 +151,7 @@ Mam_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1 + (1 + Time*Category1|Country) + (
                  prior(normal(0,4), "sd")),
                data = Mam_BA,
                control = list(adapt_delta = .99, max_treedepth = 15),
-               file = "BA_Models/Exports_ER/Mam_Exp_BA.rds",
+               file = "BA_Models/Exports_ER/Mam_Exp_BA_vH.rds",
                chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 Rept_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1 + (1 + Time*Category1|Country) + (1|Year)), 
@@ -163,7 +163,7 @@ Rept_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1 + (1 + Time*Category1|Country) + 
                     prior(normal(0,4), "sd")),
                   data = Rept_BA,
                   control = list(adapt_delta = .99),
-                  file = "BA_Models/Exports_ER/Rept_Exp_BA.rds",
+                  file = "BA_Models/Exports_ER/Rept_Exp_BA_vH.rds",
                   chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 ## Note for Amphs there are only 2 suitable countries so we fit these seperately as single level
@@ -176,7 +176,7 @@ Amph_MG_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1),
                      prior(normal(0,.5), "b")),
                    data = filter(Amph_BA, Country == "Madagascar"),
                    #control = list(adapt_delta = .99),
-                   file = "BA_Models/Exports_ER/Amph_Madagascar_Exp_BA.rds",
+                   file = "BA_Models/Exports_ER/Amph_Madagascar_Exp_BA_vH.rds",
                    chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 Amph_GY_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1), 
@@ -187,7 +187,7 @@ Amph_GY_Mod_BA <- brm(bf(vol ~ 1 + Time*Category1),
                         prior(normal(0,.5), "b")),
                       data = filter(Amph_BA, Country == "Guyana"),
                       #control = list(adapt_delta = .99),
-                      file = "BA_Models/Exports_ER/Amph_Guyana_Exp_BA.rds",
+                      file = "BA_Models/Exports_ER/Amph_Guyana_Exp_BA_vH.rds",
                       chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 C_Fit <- add_epred_draws(Mam_Mod_BA, newdata =  Mam_BA, re_formula = NULL, ndraws = 200)  %>% 

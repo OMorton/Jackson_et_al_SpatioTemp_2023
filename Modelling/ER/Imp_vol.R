@@ -72,7 +72,7 @@ Country_dat_full_vol_aves_IMP <- left_join(backbone, Country_dat_Aves) %>%
          Year = as.factor(Year)) %>%
   rename(Country = name)
 
-length(unique(Country_dat_full_vol_aves_IMP$Importer)) ## 173
+length(unique(Country_dat_full_vol_aves_IMP$Importer)) ## 174
 Country_dat_full_vol_aves_IMP %>% filter(is.na(Country))
 Country_dat_full_vol_aves_IMP <- Country_dat_full_vol_aves_IMP %>% mutate(Country = case_when(grepl("d'Ivoire", Country) ~ "Cote d'Ivoire",
                                                                                                grepl("union", Country) ~ "Reunion",
@@ -146,7 +146,7 @@ Country_dat_full_vol_mam_IMP <- left_join(backbone, Country_dat_Mam) %>%
          Year = as.factor(Year)) %>%
   rename(Country = name)
 
-length(unique(Country_dat_full_vol_mam_IMP$Importer)) ## 173
+length(unique(Country_dat_full_vol_mam_IMP$Importer)) ## 182
 Country_dat_full_vol_mam_IMP %>% filter(is.na(Country))
 Country_dat_full_vol_mam_IMP <- Country_dat_full_vol_mam_IMP %>% mutate(Country = case_when(grepl("d'Ivoire", Country) ~ "Cote d'Ivoire",
                                                                                             grepl("union", Country) ~ "Reunion",
@@ -183,7 +183,7 @@ Country_dat_full_vol_rept_IMP <- left_join(backbone, Country_dat_Rept) %>%
          Year = as.factor(Year)) %>%
   rename(Country = name)
 
-length(unique(Country_dat_full_vol_rept_IMP$Importer)) ## 146
+length(unique(Country_dat_full_vol_rept_IMP$Importer)) ## 147
 Country_dat_full_vol_rept_IMP %>% filter(is.na(Country))
 Country_dat_full_vol_rept_IMP <- Country_dat_full_vol_rept_IMP %>% mutate(Country = case_when(grepl("d'Ivoire", Country) ~ "Cote d'Ivoire",
                                                                                               grepl("union", Country) ~ "Reunion",
@@ -203,7 +203,7 @@ Mod_Imp_vol_Aves <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1
                           prior(normal(0,2), "sd"),
                           prior(normal(0,2), "sd", dpar = "hu")),
                         data = Country_dat_full_vol_aves_IMP,
-                        file = "Models/ER/Imp_Vol_Aves_HNB.rds",
+                        file = "Models/ER/Imp_Vol_Aves_HNB_vH.rds",
                         chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 Mod_Imp_vol_Amph <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1|Year),
@@ -219,7 +219,7 @@ Mod_Imp_vol_Amph <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1
                           prior(normal(0,2), "sd", dpar = "hu")),
                         data = Country_dat_full_vol_amph_IMP,
                         control = list(adapt_delta = 0.99),
-                        file = "Models/ER/Imp_Vol_Amph_HNB.rds",
+                        file = "Models/ER/Imp_Vol_Amph_HNB_vH.rds",
                         chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 Mod_Imp_vol_Mam <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1|Year),
@@ -235,7 +235,7 @@ Mod_Imp_vol_Mam <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1|
                          prior(normal(0,2), "sd", dpar = "hu")),
                        data = Country_dat_full_vol_mam_IMP,
                        control = list(adapt_delta = 0.95),
-                       file = "Models/ER/Imp_Vol_Mam_HNB.rds",
+                       file = "Models/ER/Imp_Vol_Mam_HNB_vH.rds",
                        chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 Mod_Imp_vol_Rept <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1|Year),
@@ -250,7 +250,7 @@ Mod_Imp_vol_Rept <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1
                           prior(normal(0,2), "sd"),
                           prior(normal(0,2), "sd", dpar = "hu")),
                         data = Country_dat_full_vol_rept_IMP,
-                        file = "Models/ER/Imp_Vol_Rept_HNB.rds",
+                        file = "Models/ER/Imp_Vol_Rept_HNB_vH.rds",
                         chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 write.csv(Country_dat_full_vol_aves_IMP, "Models/ER/Fitting_data/Imp_Vol_Aves.csv", na = "")

@@ -69,7 +69,7 @@ Country_dat_full_vol_aves <- left_join(backbone, Country_dat_Aves) %>%
          Year = as.factor(Year)) %>%
   rename(Country = name)
 
-length(unique(Country_dat_full_vol_aves$Exporter)) ## 114
+length(unique(Country_dat_full_vol_aves$Exporter)) ## 116
 Country_dat_full_vol_aves  %>% filter(is.na(Country), is.na(Category))
 Country_dat_full_vol_aves <- Country_dat_full_vol_aves %>% mutate(Country = case_when(grepl("d'Ivoire", Country) ~ "Cote d'Ivoire",
                                                                                         grepl("union", Country) ~ "Reunion",
@@ -141,7 +141,7 @@ Country_dat_full_vol_mam <- left_join(backbone, Country_dat_Mam) %>%
          Year = as.factor(Year)) %>%
   rename(Country = name)
 
-length(unique(Country_dat_full_vol_mam$Exporter)) ##  99
+length(unique(Country_dat_full_vol_mam$Exporter)) ##  107
 Country_dat_full_vol_mam  %>% filter(is.na(Country), is.na(Category))
 Country_dat_full_vol_mam <- Country_dat_full_vol_mam %>% mutate(Country = case_when(grepl("d'Ivoire", Country) ~ "Cote d'Ivoire",
                                                                                         grepl("union", Country) ~ "Reunion",
@@ -197,7 +197,7 @@ Mod_Exp_vol_Aves <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1
                          prior(normal(0,2), "sd"),
                          prior(normal(0,2), "sd", dpar = "hu")),
                        data = Country_dat_full_vol_aves,
-                       file = "Models/ER/Exp_Vol_Aves_HNB.rds",
+                       file = "Models/ER/Exp_Vol_Aves_HNB_vH.rds",
                        chains = 4, iter = 3000, thin = 1, cores = 4, warmup = 1500)
 
 
@@ -214,7 +214,7 @@ Mod_Exp_vol_Amph <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1
                           prior(normal(0,2), "sd", dpar = "hu")),
                         data = Country_dat_full_vol_amph,
                          control = list(adapt_delta = 0.99),
-                        file = "Models/ER/Exp_Vol_Amph_HNB.rds",
+                        file = "Models/ER/Exp_Vol_Amph_HNB_vH.rds",
                         chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 
@@ -231,7 +231,7 @@ Mod_Exp_vol_Mam <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1|
                          prior(normal(0,2), "sd"),
                          prior(normal(0,2), "sd", dpar = "hu")),
                         data = Country_dat_full_vol_mam,
-                        file = "Models/ER/Exp_Vol_Mam_HNB.rds",
+                        file = "Models/ER/Exp_Vol_Mam_HNB_vH.rds",
                         chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 
@@ -247,7 +247,7 @@ Mod_Exp_vol_Rept <- brm(bf(vol ~ 1 + SYear*Category1 + (1 + SYear |Country) + (1
                           prior(normal(0,2), "sd"),
                           prior(normal(0,2), "sd", dpar = "hu")),
                         data = Country_dat_full_vol_rept,
-                        file = "Models/ER/Exp_Vol_Rept_HNB.rds",
+                        file = "Models/ER/Exp_Vol_Rept_HNB_vH.rds",
                         chains = 4, iter = 2000, thin = 1, cores = 4, warmup = 1000)
 
 
