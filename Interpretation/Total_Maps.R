@@ -149,28 +149,30 @@ plot_XY <- function(SM_output) {
 }
 
 #### Summaries ####
-CITES_Aves_Exp_Sum <- summarise_and_match(CITES_Aves_Exp) ## 114
-CITES_Mam_Exp_Sum <- summarise_and_match(CITES_Mam_Exp) ## 99
+CITES_Aves_Exp_Sum <- summarise_and_match(CITES_Aves_Exp) ## 116
+CITES_Mam_Exp_Sum <- summarise_and_match(CITES_Mam_Exp) ## 107
 CITES_Amph_Exp_Sum <- summarise_and_match(CITES_Amph_Exp) ## 9
 CITES_Rept_Exp_Sum <- summarise_and_match(CITES_Rept_Exp) ## 97
 
-CITES_Aves_Imp_Sum <- summarise_and_match(CITES_Aves_Imp) ## 173
-CITES_Mam_Imp_Sum <- summarise_and_match(CITES_Mam_Imp) ## 173
+CITES_Aves_Imp_Sum <- summarise_and_match(CITES_Aves_Imp) ## 174
+CITES_Mam_Imp_Sum <- summarise_and_match(CITES_Mam_Imp) ## 182
 CITES_Amph_Imp_Sum <- summarise_and_match(CITES_Amph_Imp) ## 36
-CITES_Rept_Imp_Sum <- summarise_and_match(CITES_Rept_Imp) ## 146
+CITES_Rept_Imp_Sum <- summarise_and_match(CITES_Rept_Imp) ## 147
 
 ## For common legends
 Exp_min_max <- rbind(CITES_Aves_Exp_Sum$Country_vol_totals, CITES_Mam_Exp_Sum$Country_vol_totals, 
                      CITES_Amph_Exp_Sum$Country_vol_totals, CITES_Rept_Exp_Sum$Country_vol_totals) %>%
   ungroup() %>%
-  summarise(min_SR = min(Richness), max_SR = max(Richness),
-            min_vol = min(vol), max_vol = max(vol))
+  as.data.frame() %>% select(Richness, vol) %>%
+  reframe(min_SR = min(Richness, na.rm = TRUE), max_SR = max(Richness, na.rm = TRUE),
+            min_vol = min(vol, na.rm = TRUE), max_vol = max(vol, na.rm = TRUE))
 
 Imp_min_max <- rbind(CITES_Aves_Imp_Sum$Country_vol_totals, CITES_Mam_Imp_Sum$Country_vol_totals, 
                      CITES_Amph_Imp_Sum$Country_vol_totals, CITES_Rept_Imp_Sum$Country_vol_totals) %>%
   ungroup() %>%
-  summarise(min_SR = min(Richness), max_SR = max(Richness),
-            min_vol = min(vol), max_vol = max(vol))            
+  as.data.frame() %>% select(Richness, vol) %>%
+  summarise(min_SR = min(Richness, na.rm = TRUE), max_SR = max(Richness, na.rm = TRUE),
+            min_vol = min(vol, na.rm = TRUE), max_vol = max(vol, na.rm = TRUE))            
 
 #### Plotting ####
 
