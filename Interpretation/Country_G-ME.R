@@ -14,6 +14,7 @@ options(na.action = "na.pass")
 library(tidyverse)
 library(marginaleffects)
 library(bayestestR)
+library(tidybayes)
 
 #### Read in ####
 ## Model fitting data
@@ -28,15 +29,15 @@ Country_dat_full_vol_mam_IMP <- data.table::fread("Models/ER/Fitting_data/Imp_Vo
 Country_dat_full_vol_rept_IMP <- data.table::fread("Models/ER/Fitting_data/Imp_Vol_Rept.csv", na.strings = "")
 
 ## Models
-Mod_Exp_vol_Aves <- readRDS("Models/ER/Exp_Vol_Aves_HNB.rds")
-Mod_Exp_vol_Amph <- readRDS("Models/ER/Exp_Vol_Amph_HNB.rds")
-Mod_Exp_vol_Mam <- readRDS("Models/ER/Exp_Vol_Mam_HNB.rds")
-Mod_Exp_vol_Rept <- readRDS("Models/ER/Exp_Vol_Rept_HNB.rds")
+Mod_Exp_vol_Aves <- readRDS("Models/ER/Exp_Vol_Aves_HNB_vH.rds")
+Mod_Exp_vol_Amph <- readRDS("Models/ER/Exp_Vol_Amph_HNB_vH.rds")
+Mod_Exp_vol_Mam <- readRDS("Models/ER/Exp_Vol_Mam_HNB_vH.rds")
+Mod_Exp_vol_Rept <- readRDS("Models/ER/Exp_Vol_Rept_HNB_vH.rds")
 
-Mod_Imp_vol_Aves <- readRDS("Models/ER/Imp_Vol_Aves_HNB.rds")
-Mod_Imp_vol_Amph <- readRDS("Models/ER/Imp_Vol_Amph_HNB.rds")
-Mod_Imp_vol_Mam <- readRDS("Models/ER/Imp_Vol_Mam_HNB.rds")
-Mod_Imp_vol_Rept <- readRDS("Models/ER/Imp_Vol_Rept_HNB.rds")
+Mod_Imp_vol_Aves <- readRDS("Models/ER/Imp_Vol_Aves_HNB_vH.rds")
+Mod_Imp_vol_Amph <- readRDS("Models/ER/Imp_Vol_Amph_HNB_vH.rds")
+Mod_Imp_vol_Mam <- readRDS("Models/ER/Imp_Vol_Mam_HNB_vH.rds")
+Mod_Imp_vol_Rept <- readRDS("Models/ER/Imp_Vol_Rept_HNB_vH.rds")
 
 #### Country-level marginal effects - EXPORTS ####
 ## Aves

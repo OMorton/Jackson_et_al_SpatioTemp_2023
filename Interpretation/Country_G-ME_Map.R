@@ -71,7 +71,7 @@ Check %>% filter(is.na(admin))
 
 Check <- left_join(G_ME_Sum_Mam_IMP, test, by = c("iso" = "iso_a2"))
 Check %>% group_by(iso) %>% filter(n()>1)
-Check %>% filter(is.na(admin)) #4 small island nations inc dissolved Netherlands Antilles
+Check %>% filter(is.na(admin)) #5 small island nations inc dissolved Netherlands Antilles
 
 Check <- left_join(G_ME_Sum_Rept_IMP, test, by = c("iso" = "iso_a2"))
 Check %>% group_by(iso) %>% filter(n()>1)
