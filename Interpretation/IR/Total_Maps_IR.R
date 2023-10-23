@@ -148,14 +148,14 @@ plot_XY <- function(SM_output) {
 
 #### Summaries ####
 CITES_Aves_Exp_Sum <- summarise_and_match(CITES_Aves_Exp) ## 130
-CITES_Mam_Exp_Sum <- summarise_and_match(CITES_Mam_Exp) ## 105
+CITES_Mam_Exp_Sum <- summarise_and_match(CITES_Mam_Exp) ## 112
 CITES_Amph_Exp_Sum <- summarise_and_match(CITES_Amph_Exp) ## 9
-CITES_Rept_Exp_Sum <- summarise_and_match(CITES_Rept_Exp) ## 116
+CITES_Rept_Exp_Sum <- summarise_and_match(CITES_Rept_Exp) ## 117
 
 CITES_Aves_Imp_Sum <- summarise_and_match(CITES_Aves_Imp) ## 98
-CITES_Mam_Imp_Sum <- summarise_and_match(CITES_Mam_Imp) ## 105
+CITES_Mam_Imp_Sum <- summarise_and_match(CITES_Mam_Imp) ## 113
 CITES_Amph_Imp_Sum <- summarise_and_match(CITES_Amph_Imp) ## 19
-CITES_Rept_Imp_Sum <- summarise_and_match(CITES_Rept_Imp) ## 86
+CITES_Rept_Imp_Sum <- summarise_and_match(CITES_Rept_Imp) ## 91
 
 ## For common legends
 Exp_min_max <- rbind(as.data.frame(CITES_Aves_Exp_Sum$Country_vol_totals), as.data.frame(CITES_Mam_Exp_Sum$Country_vol_totals), 

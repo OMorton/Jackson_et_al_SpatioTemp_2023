@@ -248,7 +248,3 @@ Map_G_ME3 <- ggarrange(Map_G_ME2, Legend, heights = c(1,.09), nrow =2 )
 ggsave(path = "Outputs/SOM/IR", Map_G_ME3, filename = "Figure2_IR.png",  bg = "white",
        device = "png", width = 30, height = 30, units = "cm")
 
-
-
-
-
