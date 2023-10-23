@@ -125,8 +125,8 @@ Aves_exp_bar <- ggplot(Aves_bar_sum, aes(x = n, y = Col, fill = Interpretation))
   geom_bar(position="stack", stat="identity") +
   scale_fill_manual(values = c("tomato", "darkgoldenrod", "grey40",  "steelblue2", "royalblue3"), drop=FALSE) +
   annotate("text", label = "0", x = 0, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "18", x = 18, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "23", x = 23, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "19", x = 19, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "24", x = 24, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   coord_cartesian(ylim = c(0.5, 2.2)) +
   theme_void() +
   theme(legend.position = "none")
@@ -145,7 +145,7 @@ Mam_Exp_top <- ggplot(filter(G_ME_Sum_Mam_EXP, n >= 10000), aes(G_ME, n, colour 
   annotate("text", label = "USA", x = 7000, y = 1135016, colour = "grey40") +
   annotate("text", label = "Peru", x = 5000, y = 800322, colour = "grey40") +
   annotate("text", label = "Namibia", x = 5000, y = 555355, colour = "grey40") +
-  annotate("text", label = "Canada", x = -10000, y = 550824, colour = "grey40") +
+  annotate("text", label = "Canada", x = -10000, y = 800322, colour = "grey40") +
   annotate("text", label = "China", x = -7000, y = 211149, colour = "royalblue3") +
   ylab("Total volume") +
   xlab("Country marginal effect of year (2000 - 2020)") +
@@ -158,8 +158,8 @@ Mam_exp_bar <- ggplot(Mam_bar_sum, aes(x = n, y = Col, fill = Interpretation)) +
   geom_bar(position="stack", stat="identity") +
   scale_fill_manual(values = c("tomato", "darkgoldenrod", "grey40",  "steelblue2", "royalblue3"), drop=FALSE) +
   annotate("text", label = "0", x = 0, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "4", x = 4, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "12", x = 12, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "5", x = 5, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "14", x = 14, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   coord_cartesian(ylim = c(0.5, 2.2)) +
   theme_void() +
   theme(legend.position = "none")
@@ -220,9 +220,9 @@ Rept_exp_bar <- ggplot(Rept_bar_sum, aes(x = n, y = Col, fill = Interpretation))
   scale_fill_manual(values = c("tomato", "darkgoldenrod", "grey40",  "steelblue2", "royalblue3"), drop=FALSE) +
   annotate("text", label = "0", x = 0, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "9", x = 9, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "17", x = 17, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "33", x = 32, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "34", x = 35, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "16", x = 16, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "32", x = 31, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "33", x = 34, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "42", x = 42, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   coord_cartesian(ylim = c(0.5, 2.2)) +
   theme_void() +
@@ -287,7 +287,7 @@ Mam_imp_bar <- ggplot(Mam_bar_sum_imp, aes(x = n, y = Col, fill = Interpretation
   scale_fill_manual(values = c("tomato", "darkgoldenrod", "grey40",  "steelblue2", "royalblue3"), drop=FALSE) +
   annotate("text", label = "0", x = 0, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "16", x = 16, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "19", x = 19, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "21", x = 21, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "24", x = 23, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "25", x = 25, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   coord_cartesian(ylim = c(0.5, 2.2)) +
@@ -350,7 +350,7 @@ Rept_imp_bar <- ggplot(Rept_bar_sum_imp, aes(x = n, y = Col, fill = Interpretati
   geom_bar(position="stack", stat="identity") +
   scale_fill_manual(values = c("tomato", "darkgoldenrod", "grey40",  "steelblue2", "royalblue3"), drop=FALSE) +
   annotate("text", label = "0", x = 0, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
-  annotate("text", label = "11", x = 11, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
+  annotate("text", label = "10", x = 10, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "14", x = 14, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "41", x = 40, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
   annotate("text", label = "42", x = 43, y = 1.9, colour = "black", fontface = 'bold', size = 4) +
